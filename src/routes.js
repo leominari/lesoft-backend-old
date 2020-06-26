@@ -6,6 +6,9 @@ const User = require('./models/User');
 const Colaborator = require('./models/Colaborator');
 const UserToken = require('./models/UserToken');
 
+routes.get("/", async (req, res) => {
+  return 'salve';
+});
 
 routes.get("/st", async (req, res) => {
   if(req.query.ps === "minari01"){
