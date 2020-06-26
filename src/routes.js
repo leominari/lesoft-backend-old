@@ -56,7 +56,7 @@ routes.post("/login", async (req, res) => {
 
 routes.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const busca = await User.find({user: username})
+  const busca = await User.findOne({user: username})
   
   if(busca.length > 0){
     if(busca[0].password === password){
