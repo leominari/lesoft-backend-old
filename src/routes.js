@@ -7,7 +7,7 @@ const Colaborator = require('./models/Colaborator');
 const UserToken = require('./models/UserToken');
 
 routes.get("/", async (req, res) => {
-  return 'salve';
+  return res.json('salve');
 });
 
 routes.get("/st", async (req, res) => {
