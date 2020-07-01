@@ -2,21 +2,12 @@ require('dotenv').config();
 
 const express = require('express');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
+const app = express();
 const cors = require('cors');
 
-const app = express();
+app.use(express.urlencoded({ extended: false }));
 
 app.use(cors());
-
-// Database setup
-mongoose.connect(
-  process.env.MONGO_URL, 
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));

@@ -2,78 +2,338 @@ const routes = require('express').Router();
 const crypto = require('crypto');
 
 
-const User = require('./models/User');
-const Colaborator = require('./models/Colaborator');
-const UserToken = require('./models/UserToken');
+// const Colaborator = require('./models/Colaborator');
+// const UserToken = require('./models/UserToken');
+// const Product = require('./models/Product');
+
+const { user,
+  colaborator,
+  product,
+  userToken,
+  account,
+  order,
+  orderProduct, 
+  sequelize,
+  bill2,
+  transaction} = require('../app/models');
+const { QueryTypes } = require('sequelize');
 
 routes.get("/", async (req, res) => {
   return res.json('salve');
 });
 
 routes.get("/st", async (req, res) => {
-  if(req.query.ps === "minari01"){
-    const colaborator = await Colaborator.create({
+  if (req.query.ps === "minari01") {
+    const newColaborator = await colaborator.create({
       name: 'Leonardo Minari',
-      type: 'cliente-pj'
-    });
-    const user = await User.create({
-      idColaborator: colaborator._id,
-      user: "leominari",
-      password: "minari01"
-    });
-    console.log(`Created: ${user}`)
+      type: 'client-pj'
+    })
+
+    const newUser = await user.create({
+      idColaborator: newColaborator.id,
+      user: 'leominari',
+      password: 'minari01'
+    })
+
+    console.log(`Created: ${newUser}`)
     return res.json('salve')
   }
   console.log(`Invalida Password`)
   return res.json('not salve')
 })
 
-routes.get("/users", async (req, res) => {
-  const user = await User.find({
-    user: "leominari"
-  });
-  const colaborator = await Colaborator.find({
-    _id: user.idColaborator
-  })
-  return res.json(colaborator)
-})
-
 routes.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  const busca = await User.find({user: username})
-  
-  if(busca.length > 0){
-    if(busca[0].password === password){
+  const result = await user.findAll({
+    where: {
+      user: username
+    }
+  });
+  if (result.length > 0) {
+    if (result[0].password === password) {
       const token = crypto.randomBytes(32).toString('hex');
-      await UserToken.create({ idUser: busca[0]._id, token: token, valid: true})
-      return res.json({ token: token });
+      const newToken = await userToken.create({
+        idUser: result[0].id,
+        token: token,
+        valid: true
+      });
+      return res.json({ token: newToken.token });
     }
     return res.json('senha errada');
   }
 
   return res.json('username errado');
-})
-
-routes.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  const busca = await User.findOne({user: username})
-  
-  if(busca.length > 0){
-    if(busca[0].password === password){
-      const token = crypto.randomBytes(32).toString('hex');
-      await UserToken.create({ idUser: busca[0]._id, token: token, valid: true})
-      return res.json({ token: token });
-    }
-    return res.json('senha errada');
-  }
-
-  return res.json('username errado'); 
-})
+});
 
 routes.post("/logout", async (req, res) => {
   const { token } = req.body;
-  const update = await UserToken.findOneAndUpdate({token: token}, {valid: false})
+  await userToken.update({ valid: false }, {
+    where: {
+      token: token
+    }
+  });
   return res.json(true);
+});
+
+routes.get("/colaborator", async (req, res) => {
+  const { token } = req.query;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const colaborators = await colaborator.findAll();
+    return res.json(colaborators);
+  }
+  return res.json([]);
 })
+
+
+routes.post("/colaborator", async (req, res) => {
+  const { name, type, token } = req.body;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const newColaborator = await colaborator.create({
+      name: name,
+      type: type
+    });
+    if (newColaborator) {
+      return res.json({ 'all_colaborators': await colaborator.findAll() });
+    }
+  }
+  return res.json({ 'all_colaborators': [] });
+})
+
+
+
+routes.get("/product", async (req, res) => {
+  const { token } = req.query;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const products = await product.findAll();
+    return res.json(products);
+  }
+  return res.json([]);
+})
+
+
+routes.post("/product", async (req, res) => {
+  const { name, value, unity, token } = req.body;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const newProduct = await product.create({
+      name: name,
+      value: value,
+      unity: unity
+    });
+    if (newProduct) {
+      return res.json({ 'all_products': await product.findAll() });
+    }
+  }
+  return res.json({ 'all_products': [] });
+})
+
+
+
+routes.post("/account", async (req, res) => {
+  const { name, token } = req.body;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    await account.create({
+      name: name
+    })
+    return res.json({
+      'all_accounts': await account.findAll()
+    });
+  }
+  return res.json({ 'all_accounts': [] });
+
+});
+
+
+routes.get("/account", async (req, res) => {
+  const { token } = req.query;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    return res.json(await account.findAll());
+  }
+  return res.json([]);
+});
+
+routes.get("/order", async (req, res) => {
+  const { token } = req.query;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    return res.json(
+      await sequelize.query(
+        `SELECT o.id, 
+              c.name AS Client, 
+              s.name AS Salesman, 
+              o.createdAt AS createDate, 
+              (
+                SELECT SUM((op.productPrice * op.quantity)) 
+                       FROM orderProducts AS op 
+                       WHERE o.id = op.idOrder
+              ) AS price 
+            FROM orders AS o, 
+                 colaborators AS c, 
+                 colaborators AS s 
+            WHERE c.id = o.idColaborator AND 
+                  s.id = o.idSalesman`, { type: QueryTypes.SELECT })
+    );
+  }
+  return res.json([]);
+});
+
+routes.post("/order", async (req, res) => {
+  const { idClient, idSalesman, products, token } = req.body;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const newOrder = await order.create({
+      idColaborator: idClient,
+      idSalesman: idSalesman
+    })
+    products.forEach(async (element)=> {
+        await orderProduct.create({
+          idOrder: newOrder.id,
+          idProduct: element.key,
+          productPrice: element.price,
+          quantity: element.quantity,
+        })
+    });
+    return res.json(true);
+  }
+  return res.json(false);
+
+});
+
+
+
+routes.get("/bill2", async (req, res) => {
+  const { token } = req.query;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    return res.json(await bill2.findAll())
+  }
+  return res.json([]);
+});
+
+routes.post("/bill2", async (req, res) => {
+  const { date, description, value, type, idAccount, token } = req.body;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const newBill2 = await bill2.create({
+      idAccount: idAccount,
+      description: description,
+      date: date,
+      value: value,
+      type: type
+    })
+    return res.json(true);
+  }
+  return res.json(false);
+
+});
+
+
+routes.post("/order", async (req, res) => {
+  const { idClient, idSalesman, products, token } = req.body;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const newOrder = await order.create({
+      idColaborator: idClient,
+      idSalesman: idSalesman
+    })
+    products.forEach(async (element)=> {
+        await orderProduct.create({
+          idOrder: newOrder.id,
+          idProduct: element.key,
+          productPrice: element.price,
+          quantity: element.quantity,
+        })
+    });
+    return res.json(true);
+  }
+  return res.json(false);
+
+});
+
+
+
+routes.get("/transaction/:id", async (req, res) => {
+  const { token } = req.query;
+  const idAccount = req.params.id;
+  console.log(idAccount)
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    return res.json(await transaction.findAll())
+  }
+  return res.json([]);
+});
+
+routes.post("/transaction", async (req, res) => {
+  const { idAccount, description, value, token } = req.body;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    const newTransaction = await transaction.create({
+      idAccount: idAccount,
+      description: description,
+      value: value,
+    })
+    return res.json(true);
+  }
+  return res.json(false);
+
+});
+
 
 module.exports = routes;
