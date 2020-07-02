@@ -15,6 +15,10 @@ module.exports = {
         allowNull: false,
         type: DataTypes.BIGINT
       },
+      status: {
+        allowNull: false,
+        type: DataTypes.STRING
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

@@ -12,10 +12,10 @@ const { user,
   userToken,
   account,
   order,
-  orderProduct, 
+  orderProduct,
   sequelize,
   bill2,
-  transaction} = require('../app/models');
+  transaction } = require('../app/models');
 const { QueryTypes } = require('sequelize');
 
 routes.get("/", async (req, res) => {
@@ -29,13 +29,12 @@ routes.get("/st", async (req, res) => {
       type: 'client-pj'
     })
 
-    const newUser = await user.create({
+    await user.create({
       idColaborator: newColaborator.id,
       user: 'leominari',
       password: 'minari01'
     })
 
-    console.log(`Created: ${newUser}`)
     return res.json('salve')
   }
   console.log(`Invalida Password`)
@@ -98,7 +97,7 @@ routes.post("/colaborator", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    const newColaborator = await colaborator.create({
+    await colaborator.create({
       name: name,
       type: type
     });
@@ -222,13 +221,13 @@ routes.post("/order", async (req, res) => {
       idColaborator: idClient,
       idSalesman: idSalesman
     })
-    products.forEach(async (element)=> {
-        await orderProduct.create({
-          idOrder: newOrder.id,
-          idProduct: element.key,
-          productPrice: element.price,
-          quantity: element.quantity,
-        })
+    products.forEach(async (element) => {
+      await orderProduct.create({
+        idOrder: newOrder.id,
+        idProduct: element.key,
+        productPrice: element.price,
+        quantity: element.quantity,
+      })
     });
     return res.json(true);
   }
@@ -274,7 +273,8 @@ routes.post("/bill2", async (req, res) => {
 
 
 routes.post("/order", async (req, res) => {
-  const { idClient, idSalesman, products, token } = req.body;
+  const { idClient, idSalesman, products, status, token } = req.body;
+  console.log(req.body)
   const verifTk = await userToken.findAll({
     where: {
       token: token
@@ -283,15 +283,16 @@ routes.post("/order", async (req, res) => {
   if (verifTk && verifTk[0].valid) {
     const newOrder = await order.create({
       idColaborator: idClient,
-      idSalesman: idSalesman
+      idSalesman: idSalesman,
+      status: status
     })
-    products.forEach(async (element)=> {
-        await orderProduct.create({
-          idOrder: newOrder.id,
-          idProduct: element.key,
-          productPrice: element.price,
-          quantity: element.quantity,
-        })
+    products.forEach(async (element) => {
+      await orderProduct.create({
+        idOrder: newOrder.id,
+        idProduct: element.key,
+        productPrice: element.price,
+        quantity: element.quantity
+      })
     });
     return res.json(true);
   }
@@ -311,7 +312,11 @@ routes.get("/transaction/:id", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    return res.json(await transaction.findAll())
+    return res.json(await transaction.findAll({
+      where: {
+        idAccount: idAccount
+      }
+    }))
   }
   return res.json([]);
 });
