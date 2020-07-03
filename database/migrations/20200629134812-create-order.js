@@ -11,13 +11,13 @@ module.exports = {
         allowNull: false,
         type: DataTypes.BIGINT
       },
-      idSalesman: {
-        allowNull: false,
-        type: DataTypes.BIGINT
-      },
       status: {
         allowNull: false,
         type: DataTypes.STRING
+      },
+      idSalesman: {
+        allowNull: false,
+        type: DataTypes.BIGINT
       },
       createdAt: {
         allowNull: false,
