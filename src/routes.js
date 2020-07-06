@@ -134,7 +134,6 @@ routes.post("/colaborator", async (req, res) => {
 })
 
 
-
 routes.get("/product", async (req, res) => {
   const { token } = req.query;
   const verifTk = await userToken.findAll({
@@ -259,7 +258,6 @@ routes.post("/order", async (req, res) => {
     return res.json(true);
   }
   return res.json(false);
-
 });
 
 
@@ -336,6 +334,32 @@ routes.post("/transaction", async (req, res) => {
   }
   return res.json(false);
 
+});
+
+
+
+routes.get("/orderproduct/:id", async (req, res) => {
+  const { token } = req.query;
+  const idOrder = req.params.id;
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+
+    const consult = await sequelize.query(
+      `SELECT p.id as 'key',
+              p.name as 'name',
+              op.productPrice as 'price',
+              op.quantity as 'quantity'        
+      FROM  orderProducts as op,
+            products as p
+      WHERE op.id = ${idOrder} AND p.id = op.idProduct`, { type: QueryTypes.SELECT })
+
+    return res.json(consult)
+  }
+  return res.json([]);
 });
 
 
