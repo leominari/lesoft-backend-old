@@ -113,7 +113,6 @@ routes.get("/colaborator", async (req, res) => {
   return res.json([]);
 })
 
-
 routes.post("/colaborator", async (req, res) => {
   const { name, type, token } = req.body;
   const verifTk = await userToken.findAll({
@@ -133,7 +132,6 @@ routes.post("/colaborator", async (req, res) => {
   return res.json({ 'all_colaborators': [] });
 })
 
-
 routes.get("/product", async (req, res) => {
   const { token } = req.query;
   const verifTk = await userToken.findAll({
@@ -147,7 +145,6 @@ routes.get("/product", async (req, res) => {
   }
   return res.json([]);
 })
-
 
 routes.post("/product", async (req, res) => {
   const { name, value, unity, token } = req.body;
@@ -169,8 +166,6 @@ routes.post("/product", async (req, res) => {
   return res.json({ 'all_products': [] });
 })
 
-
-
 routes.post("/account", async (req, res) => {
   const { name, token } = req.body;
   const verifTk = await userToken.findAll({
@@ -189,7 +184,6 @@ routes.post("/account", async (req, res) => {
   return res.json({ 'all_accounts': [] });
 
 });
-
 
 routes.get("/account", async (req, res) => {
   const { token } = req.query;
@@ -260,8 +254,6 @@ routes.post("/order", async (req, res) => {
   return res.json(false);
 });
 
-
-
 routes.get("/bill2", async (req, res) => {
   const { token } = req.query;
   const verifTk = await userToken.findAll({
@@ -295,8 +287,6 @@ routes.post("/bill2", async (req, res) => {
   return res.json(false);
 
 });
-
-
 
 routes.get("/transaction/:id", async (req, res) => {
   const { token } = req.query;
@@ -335,8 +325,6 @@ routes.post("/transaction", async (req, res) => {
   return res.json(false);
 
 });
-
-
 
 routes.get("/orderproduct/:id", async (req, res) => {
   const { token } = req.query;
