@@ -51,6 +51,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('addresss');
+    return queryInterface.dropTable('address');
   }
 };

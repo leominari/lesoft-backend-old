@@ -1,29 +1,13 @@
 module.exports = {
   up: (queryInterface, DataTypes) => {
-    return queryInterface.createTable('bill2s', {
+    return queryInterface.createTable('typeColaborators', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.BIGINT,
       },
-      idAccount: {
-        allowNull: false,
-        type: DataTypes.BIGINT
-      },
-      description: {
-        allowNull: false,
-        type: DataTypes.STRING
-      },
-      date: {
-        allowNull: false,
-        type: DataTypes.DATE
-      },
-      value: {
-        allowNull: false,
-        type: DataTypes.DOUBLE
-      },
-      type: {
+      name: {
         allowNull: false,
         type: DataTypes.STRING
       },
@@ -39,6 +23,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('bill2s');
+    return queryInterface.dropTable('typeColaborator');
   }
 };
