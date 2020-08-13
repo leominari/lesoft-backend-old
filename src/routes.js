@@ -2,25 +2,26 @@ const routes = require('express').Router();
 const crypto = require('crypto');
 
 const { user,
+  colaborator,
   typeColaborator,
   userToken } = require('../app/models');
 
-const colaborator = require('./routes/colaborator');
-const account = require('./routes/account');
-const bill = require('./routes/bill');
-const order = require('./routes/order');
-const orderProduct = require('./routes/orderproduct');
-const product = require('./routes/product');
-const transaction = require('./routes/transaction');
+const colaboratorRoute = require('./routes/colaborator');
+const accountRoute = require('./routes/account');
+const billRoute = require('./routes/bill');
+const orderRoute = require('./routes/order');
+const orderProductRoute = require('./routes/orderproduct');
+const productRoute = require('./routes/product');
+const transactionRoute = require('./routes/transaction');
 
 
-routes.use(product);
-routes.use(account);
-routes.use(bill);
-routes.use(colaborator);
-routes.use(order);
-routes.use(orderProduct);
-routes.use(transaction);
+routes.use(productRoute);
+routes.use(accountRoute);
+routes.use(billRoute);
+routes.use(colaboratorRoute);
+routes.use(orderRoute);
+routes.use(orderProductRoute);
+routes.use(transactionRoute);
 
 routes.get("/", async (req, res) => {
   return res.json('salve');
@@ -29,13 +30,30 @@ routes.get("/", async (req, res) => {
 routes.get("/st", async (req, res) => {
   if (req.query.ps === "minari01") {
 
-    await user.create({
-      idColaborator: 1,
+    let newtype = await typeColaborator.create({
+      name: 'admin'
+    })
+    await typeColaborator.create({
+      name: 'Pessoa Juridica'
+    })
+    await typeColaborator.create({
+      name: 'Pessoa Fisica'
+    })
+
+    let colab = await colaborator.create({
+      name: 'Leonardo Minari',
+      idTypeColaborator: newtype.id
+    })
+
+    let admin = await user.create({
+      idColaborator: colab.id,
       user: 'leominari',
       password: 'minari01'
     })
 
-    return res.json('salve')
+    return res.json({
+      'admin': admin.user
+    })
   }
   console.log(`Invalida Password`)
   return res.json('not salve')

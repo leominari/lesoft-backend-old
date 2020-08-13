@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
-  const TypeColaborator = sequelize.define('typeColaborator', {
+  const typeColaborator = sequelize.define('typeColaborator', {
     name: DataTypes.STRING
   });
 
-  return TypeColaborator;
+  return typeColaborator;
 }

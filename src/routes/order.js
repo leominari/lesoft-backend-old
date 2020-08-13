@@ -65,4 +65,21 @@ routes.post("/order", async (req, res) => {
 });
 
 
+routes.put("/order", async (req, res) => {
+  const { idSalesman, idClient, products, token } = req.body;
+  console.log(req.body)
+  const verifTk = await userToken.findAll({
+    where: {
+      token: token
+    }
+  });
+  if (verifTk && verifTk[0].valid) {
+    return res.json(true);
+  }
+  res.status()
+  return res.json(false);
+});
+
+
+
 module.exports = routes

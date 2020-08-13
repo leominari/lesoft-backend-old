@@ -1,11 +1,11 @@
 const routes = require('express').Router();
 
 const { userToken,
-  bill2 } = require('../../app/models');
+  bill } = require('../../app/models');
 
 
 
-routes.get("/bill2", async (req, res) => {
+routes.get("/bill", async (req, res) => {
   const { token } = req.query;
   const verifTk = await userToken.findAll({
     where: {
@@ -13,12 +13,12 @@ routes.get("/bill2", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    return res.json(await bill2.findAll())
+    return res.json(await bill.findAll())
   }
   return res.json([]);
 });
 
-routes.post("/bill2", async (req, res) => {
+routes.post("/bill", async (req, res) => {
   const { date, description, value, type, idAccount, token } = req.body;
   const verifTk = await userToken.findAll({
     where: {
@@ -26,7 +26,7 @@ routes.post("/bill2", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    const newBill2 = await bill2.create({
+    const newBill = await bill.create({
       idAccount: idAccount,
       description: description,
       date: date,

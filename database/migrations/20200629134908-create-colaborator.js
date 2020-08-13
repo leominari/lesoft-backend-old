@@ -11,10 +11,6 @@ module.exports = {
         allowNull: false,
         type: DataTypes.STRING,
       },
-      idAdress: {
-        allowNull: false,
-        type: DataTypes.BIGINT,
-      },
       idTypeColaborator: {
         allowNull: false,
         type: DataTypes.BIGINT,
