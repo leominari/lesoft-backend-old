@@ -24,8 +24,7 @@ routes.get("/orderproduct/:id", async (req, res) => {
               op.quantity as 'quantity'        
       FROM  orderProducts as op,
             products as p
-      WHERE op.id = ${idOrder} AND p.id = op.idProduct`, { type: QueryTypes.SELECT })
-
+      WHERE op.idOrder = ${idOrder} AND p.id = op.idProduct`, { type: QueryTypes.SELECT })
     return res.json(consult)
   }
   return res.json([]);

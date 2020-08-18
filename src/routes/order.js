@@ -66,14 +66,40 @@ routes.post("/order", async (req, res) => {
 
 
 routes.put("/order", async (req, res) => {
-  const { idSalesman, idClient, products, token } = req.body;
-  console.log(req.body)
+  const { idSalesman, idClient, products, idOrder, token } = req.body;
   const verifTk = await userToken.findAll({
     where: {
       token: token
     }
   });
+  console.log(idOrder)
+  if (products.length > 0) {
+    await sequelize.query(
+      `DELETE FROM orderProducts 
+            WHERE orderProducts.idOrder = ${idOrder}`, { type: QueryTypes.DELETE }
+    );
+
+    products.forEach(async (product) => {
+      await orderProduct.create({
+        idOrder: idOrder,
+        idProduct: product.key,
+        productPrice: product.price,
+        quantity: product.quantity
+      })
+    });
+  }
   if (verifTk && verifTk[0].valid) {
+    if (idSalesman) {
+      await sequelize.query(
+        `UPDATE orders SET idSalesman = ${idSalesman} WHERE id = ${idOrder}`, { type: QueryTypes.DELETE }
+      );  
+    }
+    if (idClient) {
+      await sequelize.query(
+        `UPDATE orders SET idColaborator = ${idClient} WHERE id = ${idOrder}`, { type: QueryTypes.DELETE }
+      );  
+    }
+
     return res.json(true);
   }
   res.status()
