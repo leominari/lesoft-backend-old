@@ -11,9 +11,9 @@ module.exports = {
         allowNull: false,
         type: DataTypes.BIGINT
       },
-      description: {
+      idColaborator: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.BIGINT
       },
       date: {
         allowNull: false,
@@ -25,6 +25,10 @@ module.exports = {
       },
       type: {
         allowNull: false,
+        type: DataTypes.STRING
+      },
+      observation: {
+        allowNull: true,
         type: DataTypes.STRING
       },
       createdAt: {

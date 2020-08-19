@@ -1,10 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   const Bill = sequelize.define('bill', {
     idAccount: DataTypes.BIGINT,
-    description: DataTypes.STRING,
+    idColaborator: DataTypes.BIGINT,
     date: DataTypes.DATE,
     value: DataTypes.DOUBLE,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    observation: DataTypes.STRING
   });
 
   return Bill;

@@ -19,7 +19,7 @@ routes.get("/bill", async (req, res) => {
 });
 
 routes.post("/bill", async (req, res) => {
-  const { date, description, value, type, idAccount, token } = req.body;
+  const { date, observation, idColaborator, value, type, idAccount, token } = req.body;
   const verifTk = await userToken.findAll({
     where: {
       token: token
@@ -28,10 +28,11 @@ routes.post("/bill", async (req, res) => {
   if (verifTk && verifTk[0].valid) {
     const newBill = await bill.create({
       idAccount: idAccount,
-      description: description,
+      idColaborator: idColaborator,
       date: date,
       value: value,
-      type: type
+      type: type,
+      observation: observation
     })
     return res.json(true);
   }
@@ -39,6 +40,12 @@ routes.post("/bill", async (req, res) => {
 
 });
 
+routes.put("/bill", async (req, res) =>{
+  res.json('put')
+});
 
+routes.delete("/bill", async (req, res) =>{
+  res.json('delete')
+});
 
 module.exports = routes

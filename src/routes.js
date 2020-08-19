@@ -40,23 +40,22 @@ routes.get("/st", async (req, res) => {
       name: 'Pessoa Fisica'
     })
 
-    let colab = await colaborator.create({
-      name: 'Leonardo Minari',
-      idTypeColaborator: newtype.id
-    })
-
-    let admin = await user.create({
-      idColaborator: colab.id,
+    await user.create({
+      idColaborator: 0,
       user: 'leominari',
       password: 'minari01'
     })
 
-    return res.json({
-      'admin': admin.user
+    await user.create({
+      idColaborator: 0,
+      user: 'reminari',
+      password: 'meguinha'
     })
+
+    return res.json('Created.')
   }
   console.log(`Invalida Password`)
-  return res.json('not salve')
+  return res.json('Not Created.')
 })
 
 routes.post("/login", async (req, res) => {
@@ -76,10 +75,10 @@ routes.post("/login", async (req, res) => {
       });
       return res.json({ token: newToken.token });
     }
-    return res.json('senha errada');
+    return res.status(204).send('Wrong Password.');
   }
 
-  return res.json('username errado');
+  return res.status(204).send('Wrong Username.');
 });
 
 routes.post("/logout", async (req, res) => {
