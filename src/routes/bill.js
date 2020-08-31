@@ -1,7 +1,9 @@
 const routes = require('express').Router();
 
 const { userToken,
-  bill } = require('../../app/models');
+  bill, 
+  sequelize} = require('../../app/models');
+const { QueryTypes } = require('sequelize');
 
 
 
@@ -13,7 +15,20 @@ routes.get("/bill", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    return res.json(await bill.findAll())
+    return res.json(
+      await sequelize.query(
+        `SELECT	b.id,
+                ac.name as accountName,
+                co.name as colaboratorName,
+                b.type,
+                b.date,
+                b.value
+        FROM	bills as b,
+              accounts as ac,
+              colaborators as co
+        WHERE	b.idColaborator = co.id AND 
+              b.idAccount = ac.id`, { type: QueryTypes.SELECT })
+    )
   }
   return res.json([]);
 });
