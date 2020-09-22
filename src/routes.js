@@ -13,6 +13,7 @@ const orderRoute = require('./routes/order');
 const orderProductRoute = require('./routes/orderproduct');
 const productRoute = require('./routes/product');
 const transactionRoute = require('./routes/transaction');
+const planoContasRoute = require('./routes/planoContas');
 
 
 routes.use(productRoute);
@@ -22,40 +23,25 @@ routes.use(colaboratorRoute);
 routes.use(orderRoute);
 routes.use(orderProductRoute);
 routes.use(transactionRoute);
+routes.use(planoContasRoute);
 
 routes.get("/", async (req, res) => {
-  return res.json('salve');
+  return res.json('API LESOFT');
 });
 
-routes.get("/st", async (req, res) => {
+//Start System localhost:port/ss?ps=senha
+routes.get("/ss", async (req, res) => {
   if (req.query.ps === "minari01") {
-
-    let newtype = await typeColaborator.create({
-      name: 'admin'
-    })
-    await typeColaborator.create({
-      name: 'Pessoa Juridica'
-    })
-    await typeColaborator.create({
-      name: 'Pessoa Fisica'
-    })
 
     await user.create({
       idColaborator: 0,
       user: 'leominari',
       password: 'minari01'
-    })
+    });
 
-    await user.create({
-      idColaborator: 0,
-      user: 'reminari',
-      password: 'meguinha'
-    })
-
-    return res.json('Created.')
+    return res.json('Success.');
   }
-  console.log(`Invalida Password`)
-  return res.json('Not Created.')
+  return res.json('Not Created.');
 })
 
 routes.post("/login", async (req, res) => {
