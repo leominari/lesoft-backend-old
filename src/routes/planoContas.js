@@ -1,7 +1,10 @@
 const routes = require('express').Router();
 
 const { userToken,
-  PlanoConta } = require('../../app/models');
+  planoContas,
+  sequelize } = require('../../app/models');
+
+const { QueryTypes } = require('sequelize');
 
 
 
@@ -14,7 +17,7 @@ routes.get("/pc/:id", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    return res.json(await PlanoConta.findAll({
+    return res.json(await planoContas.findAll({
       where: {
         idAccount: idAccount
       }
@@ -31,7 +34,12 @@ routes.get("/pc", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    return res.json(await PlanoConta.findAll());
+
+    return res.json(
+      await sequelize.query(
+        `SELECT	* 
+          FROM planocontas`, { type: QueryTypes.SELECT })
+    );
   }
   return res.json([]);
 });
@@ -44,11 +52,10 @@ routes.post("/pc", async (req, res) => {
     }
   });
   if (verifTk && verifTk[0].valid) {
-    const newPlanoConta = await PlanoConta.create({
+    const newPlanoConta = await planoContas.create({
       idPai: idPai,
       descricao: descricao,
-    })
-    console.log(newPlanoConta);
+    });
     return res.json(true);
   }
   return res.json(false);

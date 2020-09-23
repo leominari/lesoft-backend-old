@@ -1,9 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
-  const PlanoConta = sequelize.define('planoConta', {
-    descricao: DataTypes.STRING,
+  const planoConta = sequelize.define('planoContas', {
     idPai: DataTypes.BIGINT,
     descricao: DataTypes.STRING,
   });
 
-  return PlanoConta;
+  return planoConta;
 }
