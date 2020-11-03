@@ -38,14 +38,15 @@ routes.get("/pc", async (req, res) => {
     return res.json(
       await sequelize.query(
         `SELECT	* 
-          FROM planocontas`, { type: QueryTypes.SELECT })
+          FROM planocontas
+          ORDER BY codigoPai DESC`, { type: QueryTypes.SELECT })
     );
   }
   return res.json([]);
 });
 
 routes.post("/pc", async (req, res) => {
-  const { idPai, descricao, token } = req.body;
+  const { codigo, codigoPai, nome, token } = req.body;
   const verifTk = await userToken.findAll({
     where: {
       token: token
@@ -53,8 +54,9 @@ routes.post("/pc", async (req, res) => {
   });
   if (verifTk && verifTk[0].valid) {
     const newPlanoConta = await planoContas.create({
-      idPai: idPai,
-      descricao: descricao,
+      codigoPai: codigoPai,
+      codigo: codigo,
+      nome: nome,
     });
     return res.json(true);
   }

@@ -9,11 +9,15 @@ module.exports = {
         primaryKey: true,
         type: DataTypes.BIGINT,
       },
-      idPai: {
+      codigoPai: {
         allowNull: true,
-        type: DataTypes.BIGINT,
+        type: DataTypes.STRING,
       },
-      descricao:{
+      codigo: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      nome: {
         allowNull: false,
         type: DataTypes.STRING,
       },
