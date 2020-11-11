@@ -6,8 +6,6 @@ const { userToken,
 
 const { QueryTypes } = require('sequelize');
 
-
-
 routes.get("/pc/:id", async (req, res) => {
   const { token } = req.query;
   const idAccount = req.params.id;
@@ -61,8 +59,6 @@ routes.post("/pc", async (req, res) => {
     return res.json(true);
   }
   return res.json(false);
-
 });
-
 
 module.exports = routes

@@ -2,7 +2,6 @@ const routes = require('express').Router();
 const { colaborator,
   userToken,
   address,
-  pessoaJuridica,
   pessoaFisica,
   sequelize } = require('../../app/models');
 
@@ -41,7 +40,8 @@ routes.post("/colaborator", async (req, res) => {
   }
   if (verifTk && verifTk[0].valid) {
     if (type === "pj") {
-      const { razaoSocial,
+      const { 
+        razaoSocial,
         nomeFantasia,
         cnpj,
         ie,
@@ -62,7 +62,6 @@ routes.post("/colaborator", async (req, res) => {
         observation
       } = req.body;
 
-
       let newAddress = await address.create({
         cep: cep,
         rua: street,
@@ -72,14 +71,9 @@ routes.post("/colaborator", async (req, res) => {
         cidade: city,
         estado: state,
         pais: country
-      })
+      });
 
       let newColaborator = await colaborator.create({
-        name: razaoSocial,
-        idTypeColaborator: 2
-      })
-
-      let newPessoaJuridica = await pessoaJuridica.create({
         idAddress: newAddress.id,
         idColaborator: newColaborator.id,
         NomeFantasia: nomeFantasia,
@@ -92,11 +86,14 @@ routes.post("/colaborator", async (req, res) => {
         Celular: celular,
         Email: email,
         Observacao: observation
-      })
+      });
+
       return res.json({ 'newPJ': newPessoaJuridica })
     }
     else {
-      const { name,
+
+      const { 
+        name,
         birthDate,
         cpf,
         rg,
@@ -114,7 +111,6 @@ routes.post("/colaborator", async (req, res) => {
         email,
         observation
       } = req.body;
-
 
       let newAddress = await address.create({
         cep: cep,
@@ -144,6 +140,7 @@ routes.post("/colaborator", async (req, res) => {
         email: email,
         observacao: observation
       })
+
       return res.json({ 'newPF': newPessoaFisica })
     }
 
