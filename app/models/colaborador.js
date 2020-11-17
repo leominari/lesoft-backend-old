@@ -1,21 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
-  const Colaborator = sequelize.define('colaborator', {
+  const Colaborador = sequelize.define('colaborador', {
     Identificador: DataTypes.STRING,
     Name: DataTypes.STRING,
     NomeFantasia: DataTypes.STRING,
     RG: DataTypes.STRING,
-    Gender: DataTypes.STRING,
+    Sexo: DataTypes.STRING,
     InscricaoEstadual: DataTypes.STRING,
     ContribuinteICMS: DataTypes.BOOLEAN,
-    BirthDate: DataTypes.DATE,
+    DataNascimento: DataTypes.DATE,
     ConsumidorFinal: DataTypes.BOOLEAN,
     InscricaoMunicipal: DataTypes.STRING,
-    idAddress: DataTypes.BIGINT,
+    idEndereco: DataTypes.BIGINT,
     Telefone: DataTypes.STRING,
     Celular: DataTypes.STRING,
     Email: DataTypes.STRING,
     Observacao: DataTypes.STRING,
   });
 
-  return Colaborator;
+  return Colaborador;
 }

@@ -2,11 +2,9 @@ const routes = require('express').Router();
 const crypto = require('crypto');
 
 const { user,
-  colaborator,
-  typeColaborator,
   userToken } = require('../app/models');
 
-const colaboratorRoute = require('./routes/colaborator');
+const colaboradorRoute = require('./routes/colaborador');
 const accountRoute = require('./routes/account');
 const billRoute = require('./routes/bill');
 const orderRoute = require('./routes/order');
@@ -19,14 +17,14 @@ const planoContasRoute = require('./routes/planoContas');
 routes.use(productRoute);
 routes.use(accountRoute);
 routes.use(billRoute);
-routes.use(colaboratorRoute);
+routes.use(colaboradorRoute);
 routes.use(orderRoute);
 routes.use(orderProductRoute);
 routes.use(transactionRoute);
 routes.use(planoContasRoute);
 
 routes.get("/", async (req, res) => {
-  return res.json('API LESOFT');
+  return res.json('API ONLINE');
 });
 
 //Start System localhost:port/ss?ps=senha

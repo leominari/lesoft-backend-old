@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, DataTypes) => {
-    return queryInterface.createTable('colaborators', {
+    return queryInterface.createTable('colaborador', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -23,7 +23,7 @@ module.exports = {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      Gender: {
+      Sexo: {
         allowNull: false,
         type: DataTypes.STRING,
       },
@@ -35,7 +35,7 @@ module.exports = {
         allowNull: false,
         type: DataTypes.BOOLEAN,
       },
-      BirthDate: {
+      DataNascimento: {
         allowNull: false,
         type: DataTypes.DATE,
       },
@@ -47,7 +47,7 @@ module.exports = {
         allowNull: true,
         type: DataTypes.STRING,
       },
-      idAddress: {
+      idEndereco: {
         allowNull: false,
         type: DataTypes.BIGINT,
       },
@@ -79,6 +79,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('colaborators');
+    return queryInterface.dropTable('colaborador');
   }
 };
